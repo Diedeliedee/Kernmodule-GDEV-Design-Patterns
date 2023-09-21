@@ -8,7 +8,7 @@ public class CloseRangeDecorator : AWeaponDecorator
 
     public CloseRangeDecorator(Transform source, AWeaponDecorator wrappee) : base(wrappee)
     {
-        this.source = source
+        this.source = source;
     }
 
     public override void Hit(out IDamagable hitObject)
