@@ -12,6 +12,12 @@ public class PlayerCombat : MonoBehaviour
 
     private void Start()
     {
+        //  Adding commands to the input handler.
+        var inputHandler = (InputHandler)ServiceLocator.Instance.Get("Input");
+
+        inputHandler.AddCommand(LeftMouseButtonPressed, new FireCommand(gun));
+        inputHandler.AddCommand(RightMouseButtonPressed, new FireCommand(pickaxe));
+
         state = State.HOLSTERGUN;
         pickaxe.Deactivate();
     }
@@ -47,6 +53,9 @@ public class PlayerCombat : MonoBehaviour
                 break;
         }
     }
+
+    private bool LeftMouseButtonPressed() => Input.GetMouseButtonDown(0);
+    private bool RightMouseButtonPressed() => Input.GetMouseButtonDown(1);
 
     private enum State
     {

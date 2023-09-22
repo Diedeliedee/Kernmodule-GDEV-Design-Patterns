@@ -17,9 +17,8 @@ public class PlayerRotation : MonoBehaviour
     private void Update()
     {
         var input = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * sensitivity;
-        var offset = input * 360 * Time.deltaTime;
 
-        transform.Rotate(0f, offset.x, 0f);
-        headTransform.Rotate(-offset.y, 0f, 0f);
+        transform.Rotate(0f, input.x, 0f);
+        headTransform.Rotate(-input.y, 0f, 0f);
     }
 }

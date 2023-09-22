@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class Rock : MonoBehaviour, IHackable
 {
-    public void OnHit(int damamge)
+    private event System.Action onRockHit = null;
+
+    private void Start()
     {
-        Destroy(gameObject);
+        ((EventManager)ServiceLocator.Instance.Get("Events")).Add("OnRockHit", onRockHit);
+    }
+
+    public void OnHit(int damage)
+    {
+        onRockHit?.Invoke();
     }
 }
