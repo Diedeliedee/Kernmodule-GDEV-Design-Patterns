@@ -1,31 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    [SerializeField] private float range;
-    [Space]
-    [SerializeField] private Transform source;
+    [SerializeField] private WeaponBase gun;
+    [SerializeField] private WeaponBase pickaxe;
+
+    private State state = default;
+
+    private void Start()
+    {
+        state = State.HOLSTERGUN;
+        pickaxe.Deactivate();
+    }
 
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0) && HitSomething(out IShootable iShootable))
+        switch (state)
         {
-            iShootable.Hit(10);
-        }
-        if (Input.GetMouseButtonDown(1) && HitSomething(out IHackable iHackable))
-        {
-            iHackable.Hit(10);
+            case State.HOLSTERGUN:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    gun.Fire();
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    pickaxe.Fire();
+
+                    pickaxe.Activate();
+                    gun.Deactivate();
+
+                    state = State.HOLSTERPICKAXE;
+                }
+                break;
+
+            case State.HOLSTERPICKAXE:
+                if (Input.GetMouseButtonUp(1))
+                {
+                    pickaxe.Deactivate();
+                    gun.Activate();
+
+                    state = State.HOLSTERGUN;
+                }
+                break;
         }
     }
 
-    bool HitSomething<T>(out T hit)
+    private enum State
     {
-        hit = default;
-
-        if (!Physics.Raycast(source.position, source.forward, out RaycastHit raycastHit, range)) return false;
-        if (!raycastHit.transform.TryGetComponent(out hit)) return false;
-        return true;
+        HOLSTERGUN,
+        HOLSTERPICKAXE,
     }
 }

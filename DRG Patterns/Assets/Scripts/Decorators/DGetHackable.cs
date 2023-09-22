@@ -2,19 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CloseRangeDecorator : AWeaponDecorator
+public class DGetHackable : AWeaponDecorator
 {
     private Transform source = null;
 
-    public CloseRangeDecorator(Transform source, AWeaponDecorator wrappee) : base(wrappee)
+    public DGetHackable(Transform source, AWeaponDecorator wrappee) : base(wrappee)
     {
         this.source = source;
     }
 
-    public override void Hit(out IDamagable hitObject)
+    public override void Execute(IDamagable hitObject)
     {
-        hitObject = default;
         if (!Physics.Raycast(source.position, source.forward, out RaycastHit raycastHit, 3f)) return;
         if (!raycastHit.transform.TryGetComponent(out IHackable hit)) return;
+
+        wrappee?.Execute(hit);
     }
 }

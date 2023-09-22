@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IShootable : IDamagable
 {
-    new public void Hit(int damage);
+    new public void OnHit(int damage);
 }

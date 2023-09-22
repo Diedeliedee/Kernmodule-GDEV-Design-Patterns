@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Rock : MonoBehaviour, IHackable
 {
-    public void Hit(int damamge)
+    public void OnHit(int damamge)
     {
         Destroy(gameObject);
     }

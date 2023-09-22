@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IHackable, IShootable
 {
-    public void Hit(int damage)
+    public void OnHit(int damage)
     {
         Destroy(gameObject);
     }
