@@ -9,10 +9,12 @@ public class ServiceLocator : MonoBehaviour
 {
     //  Singleton Variables:
     private static ServiceLocator instance = null;
-    public static ServiceLocator Instance => instance;
 
     //  Service Item Pool:
     private Dictionary<string, IServiceItem> items = new Dictionary<string, IServiceItem>();
+
+    //  Getter:
+    public static ServiceLocator Instance => instance;
 
     public void Awake()
     {
