@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 public class FireCommand : ICommand
 {
-    WeaponBase weapon = null;
+    public event Action onExecute = null;
+
+    private WeaponBase weapon = null;
 
     public FireCommand(WeaponBase weapon)
     {
@@ -16,6 +18,7 @@ public class FireCommand : ICommand
     public ICommand Execute()
     {
         weapon.Fire();
+        onExecute?.Invoke();
         return this;
     }
 }

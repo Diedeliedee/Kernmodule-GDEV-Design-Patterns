@@ -8,7 +8,7 @@ public class Rock : MonoBehaviour, IHackable
 
     private void Start()
     {
-        ((EventManager)ServiceLocator.Instance.Get("Events")).Add("OnRockHit", onRockHit);
+        ((EventManager)ServiceLocator.Instance.Get("Events")).Add("OnRockHit", ref onRockHit);
     }
 
     public void OnHit(int damage)

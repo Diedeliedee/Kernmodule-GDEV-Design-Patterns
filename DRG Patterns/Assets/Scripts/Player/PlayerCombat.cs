@@ -8,58 +8,47 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private WeaponBase gun;
     [SerializeField] private WeaponBase pickaxe;
 
-    private State state = default;
+    private FireCommand fireGun = null;
+    private FireCommand usePick = null;
+
+    private InputHandler inputHandler = null;
 
     private void Start()
     {
         //  Adding commands to the input handler.
-        var inputHandler = (InputHandler)ServiceLocator.Instance.Get("Input");
+        inputHandler = (InputHandler)ServiceLocator.Instance.Get("Input");
 
-        inputHandler.AddCommand(LeftMouseButtonPressed, new FireCommand(gun));
-        inputHandler.AddCommand(RightMouseButtonPressed, new FireCommand(pickaxe));
+        fireGun = new FireCommand(gun);
+        usePick = new FireCommand(pickaxe);
 
-        state = State.HOLSTERGUN;
+        inputHandler.AddCommand(LeftMouseButtonPressed, fireGun);
+        inputHandler.AddCommand(RightMouseButtonPressed, usePick);
+
+        //  Subscribing to command events.
+        fireGun.onExecute += OnGunFired;
+        usePick.onExecute += OnPickAxed;
+
+        //  Setting state.
         pickaxe.Deactivate();
     }
 
     private void Update()
     {
-        switch (state)
-        {
-            case State.HOLSTERGUN:
-                if (Input.GetMouseButtonDown(0))
-                {
-                    gun.Fire();
-                }
-                if (Input.GetMouseButtonDown(1))
-                {
-                    pickaxe.Fire();
-
-                    pickaxe.Activate();
-                    gun.Deactivate();
-
-                    state = State.HOLSTERPICKAXE;
-                }
-                break;
-
-            case State.HOLSTERPICKAXE:
-                if (Input.GetMouseButtonUp(1))
-                {
-                    pickaxe.Deactivate();
-                    gun.Activate();
-
-                    state = State.HOLSTERGUN;
-                }
-                break;
-        }
+        inputHandler.HandleInput();
     }
 
     private bool LeftMouseButtonPressed() => Input.GetMouseButtonDown(0);
     private bool RightMouseButtonPressed() => Input.GetMouseButtonDown(1);
 
-    private enum State
+    private void OnGunFired()
     {
-        HOLSTERGUN,
-        HOLSTERPICKAXE,
+        pickaxe.Deactivate();
+        gun.Activate();
+    }
+
+    private void OnPickAxed()
+    {
+        gun.Deactivate();
+        pickaxe.Activate();
     }
 }

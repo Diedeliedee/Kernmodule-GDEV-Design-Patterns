@@ -13,7 +13,7 @@ public class EventManager : MonoBehaviour, IServiceItem
         ServiceLocator.Instance.Add("Events", this);
     }
 
-    public void Add(string eventName, Action action)
+    public void Add(string eventName, ref Action action)
     {
         eventPool.Add(eventName, action);
     }

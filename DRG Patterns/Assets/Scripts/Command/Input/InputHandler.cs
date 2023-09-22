@@ -16,14 +16,11 @@ public partial class InputHandler : MonoBehaviour, IServiceItem
         relations.Add(new InputRelation(condition, command));
     }
 
-    public List<ICommand> HandleInput()
+    public void HandleInput()
     {
-        var commands = new List<ICommand>();
-
         foreach (var relation in relations)
         {
-            if (relation.condition()) commands.Add(relation.command);
+            if (relation.condition()) relation.command.Execute();
         }
-        return commands;
     }
 }

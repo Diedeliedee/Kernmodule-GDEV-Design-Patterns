@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour, IHackable, IShootable
 
     private void Start()
     {
-        ((EventManager)ServiceLocator.Instance.Get("Events")).Add("OnEnemyHit", onEnemyHit);
+        ((EventManager)ServiceLocator.Instance.Get("Events")).Add("OnEnemyHit", ref onEnemyHit);
     }
 
     public void OnHit(int damage)
