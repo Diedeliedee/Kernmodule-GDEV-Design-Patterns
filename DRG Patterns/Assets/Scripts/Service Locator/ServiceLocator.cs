@@ -31,6 +31,11 @@ public class ServiceLocator : MonoBehaviour
         items.Add(key, item);
     }
 
+    public void Remove(string key)
+    {
+        items.Remove(key);
+    }
+
     public IServiceItem Get(string key)
     {
         var retrievedItem = items[key];
