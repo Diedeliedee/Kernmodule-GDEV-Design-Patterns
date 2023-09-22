@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IHackable, IShootable
 {
-    private event System.Action onEnemyHit = null;
+    private EventWrapper onEnemyHit = new EventWrapper();
 
     private void Start()
     {
-        ((EventManager)ServiceLocator.Instance.Get("Events")).Add("OnEnemyHit", out onEnemyHit);
+        ((EventManager)ServiceLocator.Instance.Get("Events")).Add("OnEnemyHit", onEnemyHit);
     }
 
     public void OnHit(int damage)
     {
-        onEnemyHit?.Invoke();
+        onEnemyHit.action?.Invoke();
     }
 }

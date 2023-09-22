@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour, IServiceItem
 {
-    private Dictionary<string, Action> eventPool = new Dictionary<string, Action>();
+    private Dictionary<string, EventWrapper> eventPool = new Dictionary<string, EventWrapper>();
     private const string errorMessage = "Event not found within the event pool!";
 
     private void Awake()
@@ -13,11 +13,9 @@ public class EventManager : MonoBehaviour, IServiceItem
         ServiceLocator.Instance.Add("Events", this);
     }
 
-    public void Add(string eventName, out Action action)
+    public void Add(string eventName, EventWrapper wrapper)
     {
-        action = default;
-
-        eventPool.Add(eventName, action);
+        eventPool.Add(eventName, wrapper);
     }
 
     public void Remove(string eventName)
@@ -28,13 +26,13 @@ public class EventManager : MonoBehaviour, IServiceItem
 
     public void Subscribe(string eventName, Action action)
     {
-        try { eventPool[eventName] += action; }
+        try { eventPool[eventName].action += action; }
         catch { Debug.LogWarning(errorMessage); }
     }
 
     public void Unsubscribe(string eventName, Action action)
     {
-        try { eventPool[eventName] -= action; }
+        try { eventPool[eventName].action -= action; }
         catch { Debug.LogWarning(errorMessage); }
     }
 }
